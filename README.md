@@ -27,10 +27,6 @@
 
 Пожалуйста! Проект в открытом доступе, если вы хотите видоизменять его то просто сделайте форк! Мы не требуем никаких авторских прав на это, пользуйтесь на здоровье! Не забудьте поставить звездочку ;3
 
-[![GitHub forks](https://img.shields.io/github/forks/Naereen/StrapDown.js.svg?style=social&label=Fork&maxAge)](fork)
-[![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/)
-
-
 # Как запустить это на моем ПК?
 
 > **Внимание**<br>
