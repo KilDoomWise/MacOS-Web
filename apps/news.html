@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            @font-face {
+                font-family: SF;
+                src: url("/extra/sf.woff2");
+            }
+            html {
+                padding-top: 1.80rem;
+            }
+            body {
+                padding-bottom: 20px;
+                padding-top: .60rem;
+            }
+            .newsdiv {
+                background-color: rgba(27, 27, 27, 0.185);
+                backdrop-filter: blur(50px);
+                border-radius: 10px;
+                font-family: SF, serif;
+                color: white;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            h1 {
+                font-family: SF, serif;
+                margin-bottom: 3px;
+                margin-top: 0px;
+            }
+            p {
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+            .date {
+                position: absolute;
+                top: 10px; /* Отступ сверху */
+                right: 10px; /* Отступ справа */
+                font-size: 14px; /* Размер шрифта для версии */
+                opacity: 0.8; /* Опционально, делает текст немного прозрачным */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="newsdiv">
+            <p class="date">21.06</p>
+            <h1>Обновили интерфейс</h1>
+            <p>Теперь он стал выглядит более красиво и реалистично, добавлены новые приложения и Launchpad</p>
+        </div>
+        <div class="newsdiv">
+            <p class="date">23.06</p>
+            <h1>Анимации, приложения, интерфейс!</h1>
+            <p>Теперь у Dock появилась анимация, добавилось несколько новых приложений, переписаны стили интерфейса!</p>
+        </div>
+    </body>
+</html>

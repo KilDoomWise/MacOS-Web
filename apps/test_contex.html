@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Создаем элемент input для выбора файла
+            var fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*'; // Принимаем только изображения
+            fileInput.multiple = false; // Выбор только одного файла
+        
+            // Симулируем клик по input, чтобы открыть диалог выбора файла
+            fileInput.click();
+        
+            // Обработчик события выбора файла
+            fileInput.addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    // Проверяем, является ли выбранный файл изображением
+                    if (file.type.match('image.*')) {
+                        var reader = new FileReader();
+        
+                        reader.onload = function(e) {
+                            // Меняем фоновое изображение для body
+                            document.body.style.backgroundImage = 'url(' + e.target.result + ')';
+                            // Добавляем дополнительные стили для корректного отображения
+                            document.body.style.backgroundSize = 'cover';
+                            document.body.style.backgroundPosition = 'center';
+                            document.body.style.backgroundRepeat = 'no-repeat';
+                            document.body.style.backgroundAttachment = 'fixed';
+                        };
+        
+                        reader.readAsDataURL(file);
+                    } else {
+                        console.log('Выбранный файл не является изображением');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

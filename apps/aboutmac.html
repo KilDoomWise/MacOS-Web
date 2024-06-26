@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Info</title>
+    <style>
+        html {
+            padding-top: 2.80rem;
+        }
+        .app {
+            background: #22222200;
+            color: #fff;
+            margin-top: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+            padding: 14px;
+            max-width: 600px;
+            margin: 0 auto;
+            -webkit-user-select: none; /* Chrome/Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE/Edge */
+            user-select: none; /* Стандартный синтаксис */
+        }
+        .specs {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .spec {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            padding: 10px 0;
+            border-bottom: 1px solid #444;
+        }
+        .spec:last-child {
+            border-bottom: none;
+        }
+
+        .spec-name {
+            font-weight: bold;
+            width: 100px; /* или другое фиксированное значение */
+        }
+        .spec-value {
+            color: #999;
+            flex-grow: 1;
+            text-align: right;
+        }
+        h1 {
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #999;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body class="app">
+    <center>
+        <button style="background: none; border: none;" id="hamsterkombat">
+            <img src="./_content/aboutmac/logo.png" width="128">
+        </button>
+        <h1><strong>mac</strong>OS Sequoia</h1>
+        <p class="subtitle">By Mirvis & KilDoom</p>
+    </center>
+    <div class="specs">
+        <div class="spec">
+            <span class="spec-name">Процессор</span>
+            <span class="spec-value" id="cpu">Загрузка...</span>
+        </div>
+        <div class="spec">
+            <span class="spec-name">Память</span>
+            <span class="spec-value" id="ram">Загрузка...</span>
+        </div>
+        <div class="spec">
+            <span class="spec-name">Графика</span>
+            <span class="spec-value" id="gpu">Загрузка...</span>
+        </div>
+        <div class="spec">
+            <span class="spec-name">Прототип</span>
+            <span class="spec-value">MacOS Sequoia 15.0</span>
+        </div>
+    </div><br/>
+    <center>
+        <p class="subtitle">Все права на дизайн принадлежат корпорации Apple Inc.</p>
+        <p class="subtitle">Данный проект является лишь интерпретацией всеми известной MacOS</p>
+        <p class="subtitle">Проект находиться в открытом исходном коде</p>
+    </center>
+    <script src="/extra/js/api.js"></script>
+    <script>
+
+        function play() {
+            var myAudioElement = new Audio("/apps/_content/aboutmac/pisk.mp3")
+            myAudioElement.addEventListener("canplaythrough", (event) => {
+                /* the audio is now playable; play it if permissions allow */
+                myAudioElement.play();
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const cpuInfo = document.getElementById("cpu");
+            const ramInfo = document.getElementById("ram");
+            const gpuInfo = document.getElementById("gpu");
+        
+            // Получение информации о процессоре
+            const getCPUInfo = () => {
+                const cpuCores = navigator.hardwareConcurrency || 'Неизвестно';
+                return `${cpuCores}-ядерный процессор`;
+            };
+        
+            // Получение информации о памяти
+            const getRAMInfo = () => {
+                if ('deviceMemory' in navigator) {
+                    return navigator.deviceMemory + ' ГБ';
+                } else {
+                    return 'Недоступно';
+                }
+            };
+        
+            // Получение информации о видеокарте
+            const getGPUInfo = () => {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                        // Расширенное регулярное выражение для поиска названия видеокарты
+                        const match = renderer.match(/NVIDIA GeForce (GTX|RTX) \d{3,4}( [A-Za-z]+)?|AMD Radeon (\w+ \d{3,4}( XT)?|\w+)|Intel\(R\) (\w+ Graphics|\w+)/);
+                        if (match) {
+                            return match[0];
+                        } else if (renderer.includes('ANGLE')) {
+                            // Если ANGLE присутствует, попробуем извлечь название карты
+                            const angleMatch = renderer.match(/NVIDIA GeForce (GTX|RTX) \d{3,4}( [A-Za-z]+)?|AMD Radeon \w+ \d{3,4}( XT)?|Intel\(R\) (\w+ Graphics|\w+)/);
+                            return angleMatch ? angleMatch[0] : 'Integrated Graphics';
+                        }
+                        return renderer;
+                    }
+                }
+                return 'Недоступно';
+            };
+        
+            // Установка информации
+            cpuInfo.textContent = getCPUInfo();
+            ramInfo.textContent = getRAMInfo();
+            gpuInfo.textContent = getGPUInfo();
+        
+            console.log('CPU:', cpuInfo.textContent);
+            console.log('RAM:', ramInfo.textContent);
+            console.log('GPU:', gpuInfo.textContent);
+        });
+    </script>
+    </body>
+    </html>

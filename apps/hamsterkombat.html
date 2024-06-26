@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Safari</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 5px;
+            border-radius: 3px;
+            background: #1b1b1b5d;
+            border: none;
+            width: 500px;
+            text-align: center;
+            color: whitesmoke;
+        }
+        .header button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        iframe {
+            width: 100%;
+            height: calc(100vh - 50px);
+            border: none;
+            border-radius: 10px;
+        }
+        .web {
+            margin-top: 5px;
+            margin: 5px;
+        }
+        .nbtn{
+            background: none;
+            border: none;
+            color: white;
+            font-size: 15px;
+            width: 24px;
+            height: 24px;
+            cursor: url('/extra/cursors/pointer.png'), auto;
+        }
+    </style>
+</head>
+<body>
+    <center style="margin-top: 10px;">
+        <button onclick="goBack()" class="nbtn">&#60;</button>
+        <button onclick="goForward()" class="nbtn">&#62;</button>
+        <input type="text" class="search-input" id="urlInput" placeholder="Выполните поиск или введите название веб-сайта">
+    </center>
+    <div class="web">
+        <iframe id="webView" src="https://app.hamsterkombat.io/" scrolling="false"></iframe>
+    </div>
+</body>
+</html>

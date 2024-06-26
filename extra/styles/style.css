@@ -1,0 +1,658 @@
+@font-face {
+    font-family: SFD;
+    src: url("/extra/sf.woff2");
+}
+*{
+    font-family: SFD, serif;
+    transition: background-color 150ms ease-in,background 150ms ease-in;
+}
+body {
+    
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+    margin: 0;      
+    padding: 0;
+    cursor: url('/extra/cursors/default.png'), auto;
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden;
+}
+a{
+    cursor: url('/extra/cursors/pointer.png'), auto;
+}
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.dialog-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dialog {
+    --elevation: 0px 2.7px 10.4px rgba(0, 0, 0, .124), 0px 6.5px 25px rgba(0, 0, 0, .178), 0px 12.3px 47.1px rgba(0, 0, 0, .22), 0px 21.9px 84px rgba(0, 0, 0, .262), 0px 40.9px 157.1px rgba(0, 0, 0, .316), 0px 98px 376px rgba(0, 0, 0, .44);
+    width: 352px;
+    height: 295px;
+    padding: 1rem;
+    color: white;
+    background: hsla(240, 3%, 11%, .6);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    will-change: transform;
+    border-radius: 1rem;
+    box-shadow: var(--elevation);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.dialog img {
+    margin-bottom: 1rem;
+}
+
+.dialog h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.dialog p {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.dialog .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.button-macosin {
+    width: 500px;
+    height: 2rem;
+    font-weight: 500;
+    border-radius: .5rem;
+    background-color: hsla(240, 3%, 11%, .2);
+    color: inherit;
+    text-decoration: none;
+    vertical-align: middle;
+    font-family: inherit;
+    border: 0;
+    border-radius: 0;
+    outline: 0;
+    margin: 0;
+    padding: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    cursor: var(--system-cursor-default), auto;
+}
+.default {
+    width: 100%;
+    height: 2rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    background-color: hsla(240, 3%, 11%,.2);
+}
+.primary {
+    width: 100%;
+    height: 2rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    background-color: hsla(211, 100%, 50%,.2);
+}
+.rootMessage{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    
+}
+.messageInner{
+    position: absolute;
+    top: calc(50% + 70px); /* Позиционирование чуть ниже логотипа Apple */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px; /* Размер прогресс-бара меньше */
+    height: 4px; /* Высота прогресс-бара меньше */
+    background-color: #444;
+    border-radius: 2px;
+    overflow: hidden;
+}
+#progress-bar-container {
+    position: absolute;
+    top: calc(50% + 70px); /* Позиционирование чуть ниже логотипа Apple */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px; /* Размер прогресс-бара меньше */
+    height: 4px; /* Высота прогресс-бара меньше */
+    background-color: #444;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    width: 0;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: width 0.2s ease-in-out;
+}
+
+@keyframes fadeCredits {
+    0%{
+        opacity: 0;
+    }
+    70%{
+        opacity: 100%;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+#credits {
+    opacity: 0;
+    position: absolute;
+    top: calc(50% + 90px); /* Немного ниже прогресс-бара */
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 12px; /* Размер шрифта меньше */
+    text-align: center;
+    animation: fadeCredits 1.9s ease-in-out;
+}
+
+
+
+
+#apple-logox {
+    width: 250px;
+    height: 250px;
+    background: url('https://www.apple.com/ac/globalnav/7/en_US/images/be15095f-5a20-57d0-ad14-cf4c638e223a/globalnav_apple_image__b5er5ngrzxqq_large.svg') no-repeat center center;
+    background-size: contain;
+    opacity: 100%;
+
+}
+#dock-cont {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+@keyframes menu-anim{
+    0%{
+        transform: translateY(100px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+}
+
+
+@keyframes dockAnim{
+    0%{
+        transform: translateY(100px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+}
+
+.menu-anim{
+    animation: menuAnim 0.5s ease-in-out;
+}
+
+.dock-anim{
+    animation: dockAnim 0.5s ease-in-out forwards;
+}
+
+#dock {
+    background-color: hsl(240, 3%, 11%, 0.5);
+    backdrop-filter: blur(20px);
+    box-shadow: inset 0 0 0 0.2px hsla(0, 0%, 96%, 0.7), 0 0 0 0.2px hsla(0, 0%, 13%, 0.7), hsla(0, 0%, 0%, 0.3) 2px 5px 19px 7px;
+    border-radius: 1.2rem;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    padding: 5px;
+    width: auto;
+    transition: padding 0.5s ease-out;
+    height: 100%;
+    max-height: 55px;
+}
+
+.dock-divider {
+    background-color: #ffffff38;
+    width: 1px;
+    height: 55px;
+    margin-left: 6px;
+    margin-right: 6px;
+    border-radius: 999px;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+    gap: 8px;
+    padding: 2px;
+    aspect-ratio: 1 / 1;
+    will-change: width;
+    transition: width 0.1s ease-out, height 0.1s ease-out;
+
+}
+
+
+
+.popover {
+    position: fixed;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.178);
+    background-color: hsla(240, 3%, 11%, 0.5);
+    backdrop-filter: blur(99px);
+    color: white;
+    border-radius: 5px;
+    box-shadow: hsla(0, 0%, 0%, 0.3) 0px 1px 5px 2px, inset 0 0 0 0.9px hsla(240, 3%, 11%, 0.3), 0 0 0 1.2px hsla(240, 3%, 11%, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    white-space: nowrap;
+    z-index: 1000;
+    transform: translateY(10px);
+}
+
+.popover.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+@keyframes bounce {
+    0%, 20%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-30px);
+    }
+    60% {
+        transform: translateY(0);
+    }
+}
+
+
+.bounce {
+    animation: bounce 1.5s ;
+}
+
+#menubar {
+    background-color: hsl(240, 3%, 11%, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 5px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.menu-left {
+    display: flex;
+    align-items: center;
+}
+.menu-item {
+    color: white;
+    margin: 0 10px;
+    cursor: pointer;
+    cursor: url('/extra/cursors/pointer.png'), auto;
+}
+#apple-logo {
+    width: 14px;
+    height: 17px;
+    margin-right: 20px;
+    filter: invert(1);
+    cursor: url('/extra/cursors/pointer.png'), auto;
+}
+.window {
+    position: absolute;
+    backdrop-filter: blur(50px) !important;
+    -webkit-backdrop-filter: blur(50px) !important;
+    border-radius: 10px;
+    background-color: #22222285;
+    box-shadow: 0 33px 81px rgba(0,0,0,.31);
+    border: 0.5px solid #59595a;
+    overflow: hidden;
+    color: white;
+    transform: scale(0.95);
+    opacity: 0;
+}
+.window.active {
+    transform: scale(1);
+    opacity: 1;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.window.closing {
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.window-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 0px 10px 0px;
+    padding: 1rem 1rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: .60rem;
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: hsl(240, 1%, 11%);
+    z-index: 9999;
+}
+
+.window-controls {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 0.9rem;
+    top: 0.9rem;
+    z-index: 1;
+}
+
+.window-title-container {
+    display: unset;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-65%);
+}
+
+.window-title {
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+.window-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 5px;
+    cursor: pointer;
+    padding: 2px;
+}
+.close { background-color: #ff5f56; }
+.minimize { background-color: #ffbd2e; }
+.maximize { background-color: #27c93f; }
+.window-content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+object {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: rgb(34 34 34 / 19%);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    opacity: 90%;
+}
+
+object::-webkit-scrollbar {
+    width: 12px;
+}
+
+object::-webkit-scrollbar-track {
+background-color: #2f2f2f; /* цвет фона трека */
+}
+
+object::-webkit-scrollbar-thumb {
+background-color: #4d4d4d; /* цвет ползунка */
+border-radius: 5px;
+}
+
+.resizer {
+    width: 10px;
+    height: 10px;
+    background: transparent;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: se-resize;
+}
+.submenu {
+display: none; 
+position: absolute; 
+background-color: white;
+}
+#focused-app {
+    font-weight: bold;
+    margin-right: 20px;
+}   
+.dropdown{
+    margin: 5px;
+    display: block;
+    min-width: 16rem;
+    width: max-content;
+    width: moz-max-content;
+    padding: 0.5rem;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: hsla(240, 3%, 11%, 0.3);
+    -webkit-backdrop-filter: blur(25px);
+    backdrop-filter: blur(25px);
+    border-radius: 0.5rem;
+    box-shadow: hsla(0, 0%, 0%, 0.3) 0px 0px 11px 0px, inset 0 0 0 0.9px hsla(0, 0%, 100%, 0.3), 0 0 0 1.2px hsla(240, 3%, 11%, 0.3);;
+}
+.dropdown-item{
+    --alpha: 1;
+    display: flex;
+    justify-content: flex-start;
+    width: 94%;
+    padding: 0.2rem 0.4rem;
+    margin: 0.1rem;
+    letter-spacing: 0.4px;
+    font-weight: 400 !important;
+    font-size: 0.9rem !important;
+    border-radius: 0.3rem;
+    transition: none;
+    color: hsla(0, 0%, 100%, 1);
+}
+.dropdown-item:hover{
+    background-color: hsl(36, 100%, 52%);
+    color: hsl(240%, 3%, 11%, 1);
+    font-weight: 500 !important;
+}
+.dropdown-item:hover > .dropdown-item-text{
+    color: black;
+    transition: .09s ease-in-out;
+}
+.dropdown-item-text{
+    margin-left: 4px;
+    color: white;
+    transition: .09s ease-in-out;
+}
+.context-menu {
+    position: fixed;
+    background: rgba(50, 50, 50, 0.377);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 8px 0;
+    min-width: 200px;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.1s ease, transform 0.1s ease;
+}
+
+.context-menu.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.context-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: #ffffff;
+}
+
+.context-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.context-menu-separator {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 4px 0;
+}
+* {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.launchpad-header{
+    background-color: #000;
+
+}
+.mac-input{
+    background-color: #00000046;
+    border: 0.5px solid rgba(255, 255, 255, 0.445);
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    text-align: center;
+    color: whitesmoke;
+    overflow: hidden;
+    box-shadow: none;
+}
+.mac-input:hover{
+    border: 0.5px solid rgba(255, 255, 255, 0.795);
+    box-shadow: none;
+}
+@keyframes launchpadFade {
+    0%{
+        transform: scale(110%);
+        opacity: 0%;
+    }
+    100%{
+        transform: scale(100%);
+        opacity: 100%;
+    }
+}
+.launchpad {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(10px);
+    z-index: 99;
+}
+
+.launchpad-appbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 120px;
+    
+}
+
+.launchpad-apps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    justify-content: center;
+    justify-items: center;
+    width: 80%; /* Регулируйте ширину контейнера по необходимости */
+    max-width: 1200px; /* Ограничьте максимальную ширину для центрирования */
+}
+
+.launchpad-app {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 90px;
+    height: 90px;
+    color: whitesmoke;
+    transition: all 6.5s ease-in-out;
+}
+
+.app-logo {
+    width: 90px;
+    height: 90px;
+}
+@keyframes openLaunchpad {
+    0% {
+        opacity: 0%;
+        transform: scale(1.25);
+    }
+    100% {
+        opacity: 100%;
+        transform: scale(1);
+    }
+}
+
+@keyframes closeLaunchpad {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.launchpadOpen {
+    animation: openLaunchpad 0.5s ease forwards;
+}
+
+.launchpadClose {
+    animation: closeLaunchpad 0.5s ease forwards;
+}

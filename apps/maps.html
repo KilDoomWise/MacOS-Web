@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Integration</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        * {
+            -webkit-user-select: none; /* Chrome/Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE/Edge */
+            user-select: none; /* Стандартный синтаксис */
+        }
+        #map {
+            height: 93vh;
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Инициализация карты
+        var map = L.map('map').setView([20, 0], 2); // [20, 0] - Центр карты, 2 - начальный масштаб для отображения всего земного шара
+
+        // Настройка тайлов для карты
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Функция для обработки успешного получения координат
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+
+            // Добавление маркера на карту в месте нахождения пользователя
+            var marker = L.marker(e.latlng).addTo(map)
+                .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+            // Добавление круга вокруг маркера
+            var circle = L.circle(e.latlng, radius).addTo(map);
+
+            // Установка вида карты на место нахождения пользователя
+            map.setView(e.latlng, 13);
+        }
+
+        // Функция для обработки ошибки при получении координат
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        // Обработка события получения координат
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+
+        // Запрос координат у браузера
+        map.locate({ setView: true, maxZoom: 16 });
+    </script>
+</body>
+</html>

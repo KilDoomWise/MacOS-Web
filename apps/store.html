@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacOS App Store</title>
+    <style>
+        html {
+            padding-top: 1.80rem;
+        }
+        body {
+            padding-top: .60rem;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .app-store {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        #search {
+            width: 300px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #e8e8ed;
+            font-size: 16px;
+        }
+
+        #app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .app-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .app-name {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .app-developer {
+            font-size: 14px;
+            color: #86868b;
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #007aff;
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-store">
+        <header>
+            <h1>App Store</h1>
+            <input type="text" id="search" placeholder="Search apps...">
+        </header>
+        <main id="app-grid"></main>
+    </div>
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        const appGrid = document.getElementById('app-grid');
+        const searchInput = document.getElementById('search');
+        const loading = document.getElementById('loading');
+
+        const apps = [
+            { name: 'Photos', developer: 'Apple', icon: 'https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/d5/6a/44/d56a44e8-36e5-7b3b-9f7c-5f6b1e7a0f8b/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.png' },
+            { name: 'iMovie', developer: 'Apple', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple125/v4/8d/2d/7f/8d2d7f0f-4f1f-6c6e-2c3e-9b2d5e2d7b3a/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.png' },
+            { name: 'GarageBand', developer: 'Apple', icon: 'https://is4-ssl.mzstatic.com/image/thumb/Purple125/v4/9f/5f/5e/9f5f5e5f-5c5e-5c5e-5c5e-5c5e5c5e5c5e/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.png' },
+            { name: 'Pages', developer: 'Apple', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple125/v4/1a/1a/1a/1a1a1a1a-1a1a-1a1a-1a1a-1a1a1a1a1a1a/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.png' },
+            { name: 'Numbers', developer: 'Apple', icon: 'https://is2-ssl.mzstatic.com/image/thumb/Purple125/v4/2b/2b/2b/2b2b2b2b-2b2b-2b2b-2b2b-2b2b2b2b2b2b/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.png' },
+        ];
+
+
+    function renderApps(appsToRender) {
+        appGrid.innerHTML = '';
+        appsToRender.forEach(app => {
+            const appCard = document.createElement('div');
+            appCard.classList.add('app-card');
+            appCard.innerHTML = `
+                <img src="${app.icon}" alt="${app.name}" class="app-icon">
+                <h2 class="app-name">${app.name}</h2>
+                <p class="app-developer">${app.developer}</p>
+            `;
+            appCard.addEventListener('click', () => {
+                loading.classList.remove('hidden');
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                }, 2000); // Имитация загрузки в течение 2 секунд
+            });
+            appGrid.appendChild(appCard);
+        });
+    }
+
+    function filterApps(searchTerm) {
+        return apps.filter(app => 
+            app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            app.developer.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }
+
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value; 
+        const filteredApps = filterApps(searchTerm);
+        renderApps(filteredApps);
+    });
+
+    // Инициализация: отображение всех приложений при загрузке страницы
+    renderApps(apps);
+</script>
+</body>
+</html>

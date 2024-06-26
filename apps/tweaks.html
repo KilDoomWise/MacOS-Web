@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Парсинг куки</title>
+    <style>
+        @font-face {
+            font-family: SF;
+            src: url("/extra/sf.woff2");
+        }
+        html {
+            padding-top: 2.80rem;
+        }
+        :root{
+            background: #222;
+            font-family: SF, serif;
+        }
+        .cookie-pair {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .cookie-name {
+            width: 40%;
+            color: white;
+        }
+        .cookie-value {
+            width: auto;
+            background-color: #11111156;
+            border: none;
+            overflow: hidden;
+            padding: 5px;
+            border-radius: 5px;
+            color: white;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            background: #00000059;
+            backdrop-filter: blur(99px);
+            padding: 1rem;
+            display: flex;
+
+            gap: .35rem; /* Добавляем промежуток между кнопками */
+        }
+        button {
+            padding: 1rem;
+            background: #2e2e2e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover{
+            background: #424242;
+        }
+    </style>
+</head>
+<body>
+    <div id="cookie-container"></div>
+    <footer>
+        <button id="save-cookies">Сохранить изменения</button>
+        <button id="reload-cookies">Перезагрузить куки</button>
+        <button id="reboot">Перезагрузить конфиг (релоад страницы)</button>
+        <button id="struct">Создать структуру</button>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const cookieContainer = document.getElementById("cookie-container");
+            const saveButton = document.getElementById("save-cookies");
+            const reloadButton = document.getElementById("reload-cookies");
+            const rebootButton = document.getElementById("reboot");
+            const structButton = document.getElementById("struct");
+
+            function parseCookies() {
+                const cookies = document.cookie.split("; ");
+                const cookieObj = {};
+
+                cookies.forEach(cookie => {
+                    const [name, value] = cookie.split("=");
+                    cookieObj[name] = value;
+                });
+
+                return cookieObj;
+            }
+
+            function createCookiePair(name, value) {
+                const pairDiv = document.createElement("div");
+                pairDiv.classList.add("cookie-pair");
+
+                const nameDiv = document.createElement("div");
+                nameDiv.classList.add("cookie-name");
+                nameDiv.textContent = name;
+
+                const valueInput = document.createElement("input");
+                valueInput.type = "text";
+                valueInput.name = name;
+                valueInput.value = decodeURIComponent(value);
+                valueInput.classList.add("cookie-value");
+                pairDiv.appendChild(nameDiv);
+                pairDiv.appendChild(valueInput);
+
+                return pairDiv;
+            }
+
+            function renderCookies() {
+                cookieContainer.innerHTML = ''; // Очищаем контейнер перед повторным рендерингом
+                const cookies = parseCookies();
+
+                for (const [name, value] of Object.entries(cookies)) {
+                    const cookiePair = createCookiePair(name, value);
+                    cookieContainer.appendChild(cookiePair);
+                }
+            }
+
+            function saveCookies() {
+                const inputs = document.querySelectorAll(".cookie-value");
+                inputs.forEach(input => {
+                    const name = input.name;
+                    const value = encodeURIComponent(input.value);
+                    document.cookie = `${name}=${value}; path=/`;
+                });
+            }
+
+            saveButton.addEventListener("click", () => {
+                saveCookies();
+                alert("Изменения сохранены!");
+            });
+            
+            structButton.addEventListener("click", () => {
+                document.cookie = `wallpaper=sequoia-dark; path=/`;
+                document.cookie = `dockType=1; path=/`;
+            });
+
+            reloadButton.addEventListener("click", () => {
+                renderCookies();
+                alert("Куки перезагружены!");
+            });
+
+            renderCookies();
+        });
+    </script>
+</body>
+</html>

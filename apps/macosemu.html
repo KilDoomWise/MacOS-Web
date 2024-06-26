@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacOS Sequoia Lockscreen</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+        #lockscreen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background: url('https://512pixels.net/downloads/macos-wallpapers/12-Monterey-Light.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        #time {
+            font-size: 100px;
+            font-weight: 200;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        #date {
+            font-size: 24px;
+            margin-bottom: 50px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        .input-container {
+            position: relative;
+            margin-top: 20px;
+        }
+        #password-input {
+            width: 240px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        #password-input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        #password-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+        .cancel-button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #password-input:not(:placeholder-shown) + .cancel-button {
+            opacity: 1;
+        }
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        #apple-logo {
+            width: 100px;
+            height: 100px;
+            background: url('https://www.apple.com/ac/globalnav/7/en_US/images/be15095f-5a20-57d0-ad14-cf4c638e223a/globalnav_apple_image__b5er5ngrzxqq_large.svg') no-repeat center center;
+            background-size: contain;
+            opacity: 0;
+            animation: fadeIn 2s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <div id="preloader">
+        <div id="apple-logo"></div>
+    </div>
+
+    <div id="lockscreen">
+        <div id="time"></div>
+        <div id="date"></div>
+        <div class="input-container">
+            <input type="password" id="password-input" placeholder="Enter Password">
+            <button class="cancel-button">&times;</button>
+        </div>
+    </div>
+
+    <div id="content" style="display: none;">
+        <!-- Здесь размещается основной контент вашей страницы -->
+        <h1>Welcome to your MacOS Sequoia-like page!</h1>
+    </div>
+
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = `expires=${date.toUTCString()}`;
+            document.cookie = `${name}=${value};${expires};path=/`;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeElement = document.getElementById('time');
+            const dateElement = document.getElementById('date');
+            
+            timeElement.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            dateElement.textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        }
+
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('preloader').style.display = 'none';
+                const password = getCookie('password');
+                if (password) {
+                    document.getElementById('content').style.display = 'block';
+                } else {
+                    document.getElementById('lockscreen').style.display = 'flex';
+                    document.getElementById('lockscreen').style.opacity = '1';
+                    updateTime();
+                    setInterval(updateTime, 1000);
+                }
+            }, 2000);
+        }
+
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (this.value === '1234') {
+                    setCookie('password', 'authenticated', 1);
+                    document.getElementById('lockscreen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('lockscreen').style.display = 'none';
+                        document.getElementById('content').style.display = 'block';
+                    }, 1000);
+                } else {
+                    this.value = '';
+                    this.placeholder = 'Неверный пароль';
+                    this.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        this.placeholder = 'Enter Password';
+                        this.style.animation = '';
+                    }, 2000);
+                }
+            }
+        });
+
+        document.querySelector('.cancel-button').addEventListener('click', function() {
+            document.getElementById('password-input').value = '';
+            this.style.opacity = '0';
+        });
+
+        document.getElementById('password-input').addEventListener('input', function() {
+            document.querySelector('.cancel-button').style.opacity = this.value ? '1' : '0';
+        });
+    </script>
+</body>
+</html>

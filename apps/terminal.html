@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacOS-style Terminal</title>
+    <style>
+        body, html {
+            margin: 0;
+            margin-top: 15px;
+            padding: 0;
+            height: 100%;
+            font-family: 'Menlo', 'Courier New', monospace;
+            background-color: #1e1e1e00;
+            color: #ffffff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+
+        #terminal {
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        #input-line {
+            display: flex;
+            align-items: center;
+        }
+        #prompt {
+            color: #00ff00;
+            margin-right: 5px;
+        }
+        #input {
+            background-color: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: inherit;
+            flex-grow: 1;
+            outline: none;
+            z-index: 1;
+        }
+        #input.error {
+            color: #ff5f56;
+        }
+        #suggestion {
+            color: #666;
+            position: absolute;
+            pointer-events: none;
+            margin-left: 16.6px;
+            z-index: 0;
+        }
+        .output {
+            margin-bottom: 10px;
+        }
+        .command {
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div id="output"></div>
+        <div id="input-line">
+            <span id="prompt">$</span>
+            <input type="text" id="input" autofocus>
+            <span id="suggestion"></span>
+        </div>
+    </div>
+
+    <script>
+        function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms*1000));
+        }
+        const input = document.getElementById('input');
+        const output = document.getElementById('output');
+        const suggestion = document.getElementById('suggestion');
+
+        const commands = {
+            'help': 'List all available commands',
+            'clear': 'Clear the terminal',
+            'date': 'Display current date and time',
+            'echo': 'Print a message',
+            'alo': 'alo',
+            'python': 'Запускает python коды',
+            'hack': "???"
+        };
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim();
+                executeCommand(command);
+                this.value = '';
+                suggestion.textContent = '';
+                this.classList.remove('error');
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                if (suggestion.textContent) {
+                    this.value = suggestion.textContent + ' ';
+                    suggestion.textContent = '';
+                    this.classList.remove('error');
+                }
+            }
+        });
+
+        input.addEventListener('input', function() {
+            const [cmd, ...args] = this.value.split(' ');
+            const inputCommand = cmd.toLowerCase();
+            
+            if (!args.length) {
+                const matchingCommand = Object.keys(commands).find(c => c.startsWith(inputCommand) && c !== inputCommand);
+                suggestion.textContent = matchingCommand || '';
+                
+                if (inputCommand && !Object.keys(commands).some(c => c.startsWith(inputCommand))) {
+                    this.classList.add('error');
+                } else {
+                    this.classList.remove('error');
+                }
+            } else {
+                suggestion.textContent = '';
+                this.classList.remove('error');
+            }
+        });
+
+        function executeCommand(command) {
+            const [cmd, ...args] = command.split(' ');
+            const commandSpan = `<span class="command">${cmd}</span>`;
+            const argsText = args.join(' ');
+            addToOutput(`$ ${commandSpan} ${argsText}`);
+            
+            switch(cmd.toLowerCase()) {
+                case 'help':
+                    Object.entries(commands).forEach(([cmd, desc]) => {
+                        addToOutput(`${cmd}: ${desc}`);
+                    });
+                    break;
+                case 'clear':
+                    output.innerHTML = '';
+                    break;
+                case 'date':
+                    addToOutput(new Date().toString());
+                    break;
+                case 'echo':
+                    addToOutput(args.join(' '));
+                    break;
+                case 'alo':
+                    addToOutput('alo');
+                    break;
+                case 'python':
+                    addToOutput('Hello world');
+                    break;
+
+                case 'hack':
+                    addToOutput('Идет взлом ' + args[0] + ' ожидание...')
+                    sleep(0.1)
+                    addToOutput('Получение базы данных...')
+                    sleep(0.5)
+                    addToOutput('Информации не найдено')
+                    break;
+                default:
+                    addToOutput(`zsh: command not found: ${cmd}`);
+            }
+        }
+
+        function addToOutput(text) {
+            const div = document.createElement('div');
+            div.innerHTML = text;
+            div.className = 'output';
+            output.appendChild(div);
+            div.scrollIntoView();
+        }
+    </script>
+</body>
+</html>

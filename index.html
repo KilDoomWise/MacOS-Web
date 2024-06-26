@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacOS Sequoia [HAMSTER]</title>
+    <link rel="stylesheet" href="/extra/styles/style.css"/>
+    <link rel="icon" href="/extra/styles/favicon.ico" type="image/x-icon">
+
+</head>
+<body>
+    <div id="preloader">
+        <div id="apple-logox"></div>
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+        <div id="credits">By Mirvis & KilDoom</div>
+    </div>
+    <div class="lockscreen">
+        
+    </div>
+    <div class="dialog-container" style="display: none;">
+        <div class="dialog" tabindex="0" role="dialog" aria-labelledby="info-title" aria-describedby="info-description">
+            <img height="100" width="100" src="/extra/icons/settings.png" alt="Wallpapers app logo">
+            <h3 id="info-title">Current Wallpaper Settings prevent changing theme</h3>
+            <p id="info-description">Head over to Wallpapers app to change this setting or choose a standalone wallpaper.</p>
+            <div class="buttons">
+                <button class="button-macosin default">Close</button>
+                <button class="button-macosin primary">Go to Wallpapers</button>
+            </div>  
+        </div>
+    </div>
+    
+    <div class="launchpad" id="launchpad">
+        <div class="launchpad-header">
+            <input class="mac-input" type="text" style="width: 300px; height: 10px;" id="app-search" placeholder="Поиск"/>
+        </div>
+        <div class="launchpad-appbox">
+            <div class="launchpad-apps">
+                <div class="launchpad-app" data-app-name="Store">
+                    <img class="app-logo" width="128" height="128" src="https://media.discordapp.net/attachments/1055207292150239334/1253793782567010305/appstore.png?ex=667725f4&is=6675d474&hm=2dfe86afcc378971b9e09c5dc838d003abee7c7fcf01a7804ec36718f686eb0f&=&format=webp&quality=lossless&width=350&height=350"/>
+                    <p class="app-name">Store</p>
+                </div>
+                <div class="launchpad-app" data-app-name="Finder">
+                    <img class="app-logo" width="128" height="128" src="./extra/icons/finder.png"/>
+                    <p class="app-name">Finder</p>
+                </div>
+                <div class="launchpad-app" data-app-name="Terminal">
+                    <img class="app-logo" width="128" height="128" src="./extra/icons/terminal.png"/>
+                    <p class="app-name">Terminal</p>
+                </div>
+                <div class="launchpad-app" data-app-name="Safari">
+                    <img class="app-logo" width="128" height="128" src="./extra/icons/safari.png"/>
+                    <p class="app-name">Safari</p>
+                </div>
+                <div class="launchpad-app" data-app-name="Clicker">
+                    <img class="app-logo" width="128" style="border-radius: 99px;" height="128" src="https://kildoom.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fkildoom.c8b94d03.png&w=256&q=75">
+                    <p class="app-name">Clicker</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div id="menubar">
+        <div class="menu-left">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" onclick="dropStatusMenu()" id="apple-logo" alt="Apple">
+          <span id="focused-app" onclick="dropFocusMenu()" class="menu-item">Рабочий стол</span>
+          <span class="menu-item">Файл</span>
+          <span class="menu-item">Редактирование</span>
+          <span class="menu-item">Просмотр</span>
+          <span class="menu-item">Перейти</span>
+          <span class="menu-item">Окно</span>
+          <span class="menu-item">Помощь</span>
+
+        </div>
+        <div>
+            <span id="clock" class="menu-item"></span>
+        </div>
+      </div>
+      <div class="popover" id="popover"></div>
+      <section id="dock-cont">
+        <div id="dock">
+            <img src="./extra/icons/finder.png" class="app" alt="Finder" data-url="./apps/finder.html" blurred="yes" buttons="close" custom="yes">
+            <div class="dock-divider"></div>
+            <img src="./extra/icons/launchpad.png" class="app" alt="Launchpad" data-url="launchpad">
+            <img src="./extra/icons/safari.png" class="app" alt="Safari" data-url="./apps/safari.html" data-height="640" data-width="960">
+            <img src="./extra/icons/terminal.png" class="app" alt="Terminal" data-url="./apps/terminal.html" custom="no">
+            <img src="./extra/icons/maps.png" class="app" alt="Карты" data-url="./apps/maps.html">
+            <img src="./extra/icons/calc.png" class="app" alt="Калькулятор" data-url="/apps/calc.html" data-height="460" data-width="258" custom="yes" maximize="no" minimize="no" blurred="yes">
+            <img src="./extra/icons/notes.png" class="app" alt="Notepad" data-url="./apps/notepad.html">
+            <img src="./extra/icons/settings.png" class="app" alt="Settings" data-url="./apps/settings.html" custom="yes">
+            <div class="dock-divider"></div>
+            <img src="https://media.discordapp.net/attachments/1107991721171750943/1253758802537218158/news.png?ex=66770560&is=6675b3e0&hm=aa6a3ea646ae861eb8d96a261edc301676cc661629c7774195237cf9a8403df7&=&format=webp&quality=lossless" class="app" alt="News" data-url="./apps/news.html">
+            <img src="./extra/icons/vscode.png" class="app" alt="Visual Studio Code" data-url="/apps/vscode.html" custom="yes">
+            <img src="/extra/icons/filestash.png" class="app" alt="FTP Client" data-url="/apps/ftp.html">
+            <img src="https://cloud.sovagroup.one/users/279076957//icon.ico" class="app" alt="Voltix Laucher" data-url="https://chat.remeow.ru/" data-height="640" data-width="960">
+        </div>
+    </section>
+    
+        
+    
+    <div id="context-menu" class="context-menu">
+        <div class="context-menu-item" onclick="alert('Option 1')">Option 1</div>
+        <div class="context-menu-item" onclick="alert('Option 2')">Option 2</div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" onclick="alert('Option 3')">Option 3</div>
+    </div>
+
+    <script src="extra/js/api.js">
+    </script>
+</body>
+</html>
